@@ -21,8 +21,13 @@ class Kippt::List
     }
   end
 
-  def clips
-    Kippt::ClipCollection.new(client.get("lists/#{id}/clips").body, client)
+  def clips(opts = {})
+    url = "lists/#{id}/clips"
+    params = []
+    params.push "limit=#{opts[:limit]}" if opts[:limit]
+    params.push "offset=#{opts[:offset]}" if opts[:offset]
+    url += "?" + params.join('&') unless params.empty?
+    Kippt::ClipCollection.new(client.get(url).body, client)
   end
 
   def follow

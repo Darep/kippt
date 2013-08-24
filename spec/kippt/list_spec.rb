@@ -43,6 +43,26 @@ describe Kippt::List do
     end
   end
 
+  describe "#clips with limit" do
+    subject { Kippt::List.new({ "id" => 10 }, client).clips(limit: 200) }
+
+    it "returns the clips for the list" do
+      stub_get("/lists/#{10}/clips?limit=200").
+        to_return(:status => 200, :body => fixture("clips_with_limit_200.json"))
+      subject.limit.should eq 200
+    end
+  end
+
+  describe "#clips with offset" do
+    subject { Kippt::List.new({ "id" => 10 }, client).clips(offset: 20) }
+
+    it "returns the clips for the list" do
+      stub_get("/lists/#{10}/clips?offset=20").
+        to_return(:status => 200, :body => fixture("clips_with_offset_20.json"))
+      subject.limit.should eq 20
+    end
+  end
+
   describe "#follow" do
     context "when request is successful" do
       let(:client) { Kippt::Client.new(valid_user_credentials) }
